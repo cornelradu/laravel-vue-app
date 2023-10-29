@@ -17,6 +17,7 @@
   export default {
     data() {
         return {
+          apiUrl: process.env.VUE_APP_API_BASE_URL,
           isHovered: false,
           contentHovered: false,
           categories: [
@@ -28,9 +29,8 @@
         
     },
     created() {
-      const api_ip = process.env.VUE_APP_API_BASE_IP;
 
-      let url = `${api_ip}:8001/api/categories`;
+      let url = `${this.apiUrl}/api/categories`;
       axios.get(url)
         .then(response => {
           console.log(response)

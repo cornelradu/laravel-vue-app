@@ -21,6 +21,7 @@
     export default {
     data() {
         return {
+        apiUrl: process.env.VUE_APP_API_BASE_URL,
         query: this.$route.query.q,
         category_id: this.$route.category_id,
         price: this.$route.price,
@@ -52,10 +53,8 @@
     },
     methods: {
       handleEnterKeyPress() {
-        const api_ip = process.env.VUE_APP_API_BASE_IP;
-
         let q = this.query;
-        let url = `${api_ip}:8001/api/products`;
+        let url = `${this.apiUrl}/api/products`;
         let atLeastOnce = false
 
         if(q !== undefined || this.category_id !== undefined || this.price == undefined || this.star || this.easybox){
@@ -85,7 +84,6 @@
           url += "easybox=" + this.easybox + '&'
         }
 
-        console.log(url)
         axios.get(url)
         .then(response => {
           this.products = response.data;

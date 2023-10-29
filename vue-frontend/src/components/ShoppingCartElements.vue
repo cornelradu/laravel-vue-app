@@ -22,98 +22,97 @@ import Cookies from 'js-cookie';
 import { emit, on } from '../event-bus.js';
 
 export default {
-data() {
-    return {
-    shoppingCart: []
-    };
-},
-watch: {
+    data() {
+        return {
+        apiUrl: process.env.VUE_APP_API_BASE_URL,
+        shoppingCart: []
+        };
+    },
+    watch: {
 
-},
-created() {
-    
-    this.test()
-    on('changedOrder2', ()=>{
+    },
+    created() {
+        
         this.test()
-    })
-  
-},
-methods: {
-  handleEnterKeyPress() {
+        on('changedOrder2', ()=>{
+            this.test()
+        })
     
-  },
-  addToShoppingCart(product_id){
-    let orders = undefined;
-    if (Cookies.get('orders') !== undefined){
-        orders = JSON.parse(Cookies.get('orders'));
-    }
-    console.log('orders')
-
-
-    if (orders === undefined || !Array.isArray(orders)){
-      orders = [product_id]
-    } else {
-      orders.push(product_id)
-    }
-    console.log('save cookie ' + orders)
-    Cookies.set('orders', JSON.stringify(orders), { expires: 7 });
-  },
-    saveCookies(){
-        let orders = []
-        for(let key in this.shoppingCart){
-            for(let i = 0; i < this.shoppingCart[key].count; i++){
-                orders.push(this.shoppingCart[key].product_id)
-            }
+    },
+    methods: {
+    handleEnterKeyPress() {
+        
+    },
+    addToShoppingCart(product_id){
+        let orders = undefined;
+        if (Cookies.get('orders') !== undefined){
+            orders = JSON.parse(Cookies.get('orders'));
         }
+        console.log('orders')
+
+
+        if (orders === undefined || !Array.isArray(orders)){
+        orders = [product_id]
+        } else {
+        orders.push(product_id)
+        }
+        console.log('save cookie ' + orders)
         Cookies.set('orders', JSON.stringify(orders), { expires: 7 });
     },
-    changeOrder(product_id, up){
-        for(let key in this.shoppingCart){
-            if(this.shoppingCart[key] .product_id == product_id){
-                if(up){
-                    this.shoppingCart[key] .count += 1
-                } else {
-                    this.shoppingCart[key] .count -= 1
+        saveCookies(){
+            let orders = []
+            for(let key in this.shoppingCart){
+                for(let i = 0; i < this.shoppingCart[key].count; i++){
+                    orders.push(this.shoppingCart[key].product_id)
                 }
             }
-        }
-        this.saveCookies()
-        emit("changedOrder")
+            Cookies.set('orders', JSON.stringify(orders), { expires: 7 });
+        },
+        changeOrder(product_id, up){
+            for(let key in this.shoppingCart){
+                if(this.shoppingCart[key] .product_id == product_id){
+                    if(up){
+                        this.shoppingCart[key] .count += 1
+                    } else {
+                        this.shoppingCart[key] .count -= 1
+                    }
+                }
+            }
+            this.saveCookies()
+            emit("changedOrder")
 
-    },
-    test(){
-        this.shoppingCart =[]
-        let orders = []
-                if (Cookies.get('orders') !== undefined)
-                    orders = JSON.parse(Cookies.get('orders'));
-        let v = {}
-        for(let order of orders){
-            if(order in v){
-                v[order] += 1
-            } else {
-                v[order] = 1
+        },
+        test(){
+            this.shoppingCart =[]
+            let orders = []
+                    if (Cookies.get('orders') !== undefined)
+                        orders = JSON.parse(Cookies.get('orders'));
+            let v = {}
+            for(let order of orders){
+                if(order in v){
+                    v[order] += 1
+                } else {
+                    v[order] = 1
+                }
+            }
+            for (let key in v){
+                axios.get(`${this.apiUrl}/api/products/` + key, {
+                
+                })
+                .then(response => {
+                // Handle the successful response here
+                    let image = "images/public/" + response.data.image
+                    console.log(image)
+                    this.shoppingCart.push({"product_id": key, "count": v[key], 'product': response.data, 'image': image})
+                })
+                .catch(error => {
+                // Handle errors here, such as displaying an error message to the user
+                console.error('Error logging in:', error);
+                });
+                
             }
         }
-        for (let key in v){
-            const api_ip = process.env.VUE_APP_API_BASE_IP;
-
-            axios.get(`${api_ip}:8001/api/products/` + key, {
-            
-            })
-            .then(response => {
-            // Handle the successful response here
-                let image = "images/public/" + response.data.image
-                console.log(image)
-                this.shoppingCart.push({"product_id": key, "count": v[key], 'product': response.data, 'image': image})
-            })
-            .catch(error => {
-            // Handle errors here, such as displaying an error message to the user
-            console.error('Error logging in:', error);
-            });
-            
-        }
     }
-  }
 };
 </script>
 

@@ -80,6 +80,7 @@ import Cookies from 'js-cookie';
   export default {
     data() {
         return {
+        apiUrl: process.env.VUE_APP_API_BASE_URL,
         isHeaderVisible: false,
         contul_meu_visible: false,
         my_username_visible: false,
@@ -89,25 +90,21 @@ import Cookies from 'js-cookie';
         };
     },
     mounted() {
-      const api_ip = process.env.VUE_APP_API_BASE_IP;
-      window.addEventListener('scroll', this.handleScroll);
-      const token = localStorage.getItem("jwtToken");
+        window.addEventListener('scroll', this.handleScroll);
+        const token = localStorage.getItem("jwtToken");
         // Use the token in your API requests
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
 
-        axios.post(`${api_ip}:8001/api/me`, {
+        axios.post(`${this.apiUrl}/api/me`, {
           
         })
         .then(response => {
-          // Handle the successful response here
-          console.log('Logged in successfully2222222123131:', response.data);
           this.logged_in = true;
           console.log(this.logged_in)
           this.username=response.data.name
         })
         .catch(error => {
-          // Handle errors here, such as displaying an error message to the user
           console.error('Error logging in:', error);
         });
 
@@ -118,22 +115,17 @@ import Cookies from 'js-cookie';
         
       on("logged_in", () => {
         const token = localStorage.getItem("jwtToken");
-        // Use the token in your API requests
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-
-        axios.post(`${api_ip}:8001/api/me`, {
+        axios.post(`${this.apiUrl}/api/me`, {
           
         })
         .then(response => {
-          // Handle the successful response here
-          console.log('Logged in successfully2222222123131:', response.data);
           this.logged_in = true;
           console.log(this.logged_in)
           this.username=response.data.name
         })
         .catch(error => {
-          // Handle errors here, such as displaying an error message to the user
           console.error('Error logging in:', error);
         });
 

@@ -16,6 +16,7 @@ import { emit, on } from '../event-bus.js';
 export default {
     data() {
         return {
+        apiUrl: process.env.VUE_APP_API_BASE_URL,
         shoppingCart: [],
         total: 0
         };
@@ -48,20 +49,16 @@ export default {
             }
             this.total = 0
             for (let key in v){
-                const api_ip = process.env.VUE_APP_API_BASE_IP;
-
-                axios.get(`${api_ip}:8001/api/products/` + key, {
+                axios.get(`${this.apiUrl}/api/products/` + key, {
                 
                 })
                 .then(response => {
-                // Handle the successful response here
                     let image = "images/public/" + response.data.image
                     console.log(image)
                     this.shoppingCart.push({"product_id": key, "count": v[key], 'product': response.data, 'image': image})
                     this.total += response.data.price * v[key]
                 })
                 .catch(error => {
-                // Handle errors here, such as displaying an error message to the user
                 console.error('Error logging in:', error);
                 });
                 

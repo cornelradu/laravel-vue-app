@@ -32,6 +32,7 @@
   export default {
     data() {
         return {
+          apiUrl: process.env.VUE_APP_API_BASE_URL,
           showElement: false,
           currentIndex: 0,
           categories: [
@@ -41,14 +42,11 @@
             'images/carousel1.avif',
             'images/carousel2.avif',
             'images/carousel3.avif'
-            // Add more image URLs as needed
           ]
         };
     },
     created() {
-      const api_ip = process.env.VUE_APP_API_BASE_IP;
-
-      let url = `${api_ip}:8001/api/categories`;
+      let url = `${this.apiUrl}/api/categories`;
       axios.get(url)
         .then(response => {
           console.log(response)
@@ -57,7 +55,6 @@
         })
         .catch(error => {
           console.error(error);
-          // Handle errors here
         });
     },
     methods: {

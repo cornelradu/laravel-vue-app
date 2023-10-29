@@ -48,7 +48,7 @@ export default {
     }
   },
   data() {
-    return {
+    return {      
       isChecked: [],
       isOpen: true,
       isOpen2: true,
@@ -76,8 +76,6 @@ export default {
             console.log(price)
             console.log(event.target.id)
             if (event.target.id === price && event.target.checked) {
-                console.log('Checkbox with ID', price, 'is checked.');
-                // Do something when the checkbox with the specified ID is checked
                 const queryParams = { ...this.$route.query };
                 queryParams.price = price;
                 this.$router.push({ path: '/search', query: queryParams });
@@ -95,8 +93,6 @@ export default {
             if(checkbox !== event.target)
             checkbox.checked =false;
         });
-
-        //
     },
     handleCheckboxChange2(event){
         const itemCheckboxes = document.querySelectorAll('.star-checkbox');

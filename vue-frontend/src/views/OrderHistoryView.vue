@@ -20,6 +20,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+        apiUrl: process.env.VUE_APP_API_BASE_URL,
         orders: {},
         orders_total : {},
         orders_timestamp: {}
@@ -31,9 +32,8 @@ export default {
   created() {
       const token = localStorage.getItem("jwtToken");
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      const api_ip = process.env.VUE_APP_API_BASE_IP;
 
-      axios.get(`${api_ip}:8001/api/orders`, {
+      axios.get(`${this.apiUrl}/api/orders`, {
         
       })
       .then(response => {
@@ -44,11 +44,10 @@ export default {
         this.orders_timestamp = {}
         for(let orderItem of response.data){
 
-              axios.get(`${api_ip}:8001/api/products/` + orderItem.product_id, {
+              axios.get(`${this.apiUrl}/api/products/` + orderItem.product_id, {
                 
               })
               .then(response => {
-              // Handle the successful response here
                   let image = "images/public/" + response.data.image
                   
                   if(!(orderItem.order_id in this.orders)){
@@ -65,16 +64,11 @@ export default {
                   
               })
               .catch(error => {
-              // Handle errors here, such as displaying an error message to the user
               console.error('Error logging in:', error);
-              });
-
-
-              
+              });             
         }
       })
       .catch(error => {
-        // Handle errors here, such as displaying an error message to the user
         console.error('Error logging in:', error);
       });
     }

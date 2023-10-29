@@ -24,18 +24,15 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      apiUrl: process.env.VUE_APP_API_BASE_URL,
       username: 'test@gmail.com',
       password: 'test'
     };
   },
   methods: {
     submitForm() {
-      // Handle form submission logic here
-      console.log('Username:', this.username);
-      console.log('Password:', this.password);
-      const api_ip = process.env.VUE_APP_API_BASE_IP;
 
-      axios.post(`${api_ip}:8001/api/login`, {
+      axios.post(`${this.apiUrl}/api/login`, {
         email: this.username,
         password: this.password,
       })

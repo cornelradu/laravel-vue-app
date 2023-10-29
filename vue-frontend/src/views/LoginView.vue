@@ -5,11 +5,11 @@
       <form @submit.prevent="submitForm">
         <div class="form-group">
           <label for="username">Username:</label>
-          <input type="text" id="username" v-model="username" required>
+          <input type="text" id="username" v-model="username" required />
         </div>
         <div class="form-group">
           <label for="password">Password:</label>
-          <input type="password" id="password" v-model="password"  required>
+          <input type="password" id="password" v-model="password" required />
         </div>
         <button type="submit">Login</button>
       </form>
@@ -18,43 +18,41 @@
 </template>
 
 <script>
-import { emit } from '@/event-bus';
-import axios from 'axios';
+import { emit } from "@/event-bus";
+import axios from "axios";
 
 export default {
   data() {
     return {
       apiUrl: process.env.VUE_APP_API_BASE_URL,
-      username: 'test@gmail.com',
-      password: 'test'
+      username: "test@gmail.com",
+      password: "test",
     };
   },
   methods: {
     submitForm() {
-
-      axios.post(`${this.apiUrl}/api/login`, {
-        email: this.username,
-        password: this.password,
-      })
-      .then(response => {
-        // Handle the successful response here
-        console.log('Logged in successfully:', response.data);
-        localStorage.setItem("jwtToken", response.data.token);
-        emit('logged_in')
-        this.$router.push({ path: '/' });
-      })
-      .catch(error => {
-        // Handle errors here, such as displaying an error message to the user
-        console.error('Error logging in:', error);
-      });
-    }
-  }
+      axios
+        .post(`${this.apiUrl}/api/login`, {
+          email: this.username,
+          password: this.password,
+        })
+        .then((response) => {
+          // Handle the successful response here
+          console.log("Logged in successfully:", response.data);
+          localStorage.setItem("jwtToken", response.data.token);
+          emit("logged_in");
+          this.$router.push({ path: "/" });
+        })
+        .catch((error) => {
+          // Handle errors here, such as displaying an error message to the user
+          console.error("Error logging in:", error);
+        });
+    },
+  },
 };
 </script>
 
 <style>
-
-
 .container {
   text-align: center;
   width: 100%;

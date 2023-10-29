@@ -1,20 +1,20 @@
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const eventBus = ref({})
+const eventBus = ref({});
 
 function emit(event, ...args) {
   if (eventBus.value[event]) {
     eventBus.value[event].forEach((callback) => {
-      callback(...args)
-    })
+      callback(...args);
+    });
   }
 }
 
 function on(event, callback) {
   if (!eventBus.value[event]) {
-    eventBus.value[event] = []
+    eventBus.value[event] = [];
   }
-  eventBus.value[event].push(callback)
+  eventBus.value[event].push(callback);
 }
 
-export { emit, on }
+export { emit, on };
